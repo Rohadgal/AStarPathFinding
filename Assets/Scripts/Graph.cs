@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Graph 
-{
+public class Graph
+{ 
     List<Node> nodes;
+    Queue<Node> toAnalize = new Queue<Node>();
+    Queue<Node> visited = new Queue<Node>();
 
     public Graph(){
         nodes = new List<Node>();
@@ -81,5 +84,36 @@ public class Graph
         edge10.setEdge(ref node7, ref node9, 6);
         edge11.setEdge(ref node8, ref node9, 7);
         
+    }
+
+    public void AStar(){
+        
+    }
+
+    private void Analize(Node node){
+        Queue<Node> toAnalize = new Queue<Node>();
+        Queue<Node> hold = new Queue<Node>();
+        int cost = 0;
+        int minCost = 0;
+        int smallestNodeCostIndex = 0;
+        for (int i = 0; i < node.GetEdges().Count; i++) {
+            Edge edge = node.GetEdges()[i];
+            cost = edge.getNodeTo().getHolistic() + edge.getCost();
+            if(i == 0){
+                minCost = cost;
+                continue;
+            }
+            if(minCost < cost){
+                minCost = cost;
+                smallestNodeCostIndex = i;
+            }
+        }
+        toAnalize.Enqueue(node.GetEdges()[smallestNodeCostIndex].getNodeTo());
+
+        for(int i = 0; i <= node.GetEdges().Count; i++){
+            if(i != smallestNodeCostIndex) {
+                hold.Enqueue(node.GetEdges()[i].getNodeTo());
+            }
+        }
     }
 }

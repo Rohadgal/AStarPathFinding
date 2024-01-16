@@ -30,4 +30,6 @@ public class Edge
     public Node getNodeTo(){
         return _to;
     }
+
+    public int getCost() { return _cost; }
 }
