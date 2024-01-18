@@ -10,6 +10,8 @@ public class Node : MonoBehaviour{
     Edge _correctEdge;
     [SerializeField]
     bool _endNode;
+    [SerializeField]
+    float _radius = 3.0f;
 
     /* Setters */
 
@@ -45,7 +47,7 @@ public class Node : MonoBehaviour{
     public int getHolistic() { return _holistic; }
 
     public void checkNodesInArea(){
-        float radius = 3.0f;
+        float radius = _radius;
         Collider[] percievedNodes = Physics.OverlapSphere(this.transform.position, radius);
         foreach(Collider col in percievedNodes){
             if(col.transform.position != this.transform.position){
