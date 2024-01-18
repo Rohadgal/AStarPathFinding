@@ -14,6 +14,13 @@ public class Edge
         _cost = cost;
     }
 
+    public Edge(Node from, Node to, int cost)
+    {
+        _from = from;
+        _to = to;
+        _cost = cost;
+    }
+
     public Edge(){
     }
 

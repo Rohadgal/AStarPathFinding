@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Graph
+public class Graph 
 { 
     List<Node> nodes;
     Queue<Node> toAnalize = new Queue<Node>();
@@ -11,6 +11,12 @@ public class Graph
 
     public Graph(){
         nodes = new List<Node>();
+    }
+
+    public List<Node> getNodes() { return nodes; }
+
+    public void setNodes(List<Node> nodesList) {
+        nodes = nodesList;
     }
 
     public void Initialize(){
@@ -115,5 +121,10 @@ public class Graph
                 hold.Enqueue(node.GetEdges()[i].getNodeTo());
             }
         }
+    }
+
+    void generateGraph()
+    {
+
     }
 }
