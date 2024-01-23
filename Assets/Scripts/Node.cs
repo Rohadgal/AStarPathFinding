@@ -48,16 +48,17 @@ public class Node : MonoBehaviour{
 
     public void checkNodesInArea(){
         float radius = _radius;
+        // Use overlapSphere to detect nodes in area
         Collider[] percievedNodes = Physics.OverlapSphere(this.transform.position, radius);
         foreach(Collider col in percievedNodes){
             if(col.transform.position != this.transform.position){
-                //print("hEY " + this.name + " collides with " + col.name);
+                // Create edge with cost using the distance between nodes
                 Edge newEdge = new Edge(this.GetComponent<Node>(), col.GetComponent<Node>(), (int)Vector3.Distance(this.transform.position, col.transform.position));
                 if(_edges == null) {
                     _edges = new List<Edge>();
                 }
+                // Add the edges created to each node´s list
                 _edges.Add(newEdge);
-                //print("From: " + newEdge.getNodeFrom().name + " to: " + newEdge.getNodeTo().name + " with cost: " + newEdge.getCost());
             }
         }
     }

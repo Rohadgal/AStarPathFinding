@@ -22,14 +22,15 @@ public class GenerateGraph : MonoBehaviour{
             }
         }
 
+        // Set holistic of each node measuring the distance between the current node and the end node
         foreach (Node node in nodes){
             node.setHolistic(node.transform, endNode.transform);
-            //print("Node: " + node.name + " holstic: " + node.getHolistic());
         }
 
         graph = new Graph();
         graph.setNodes(nodes);
 
+        // Print in console the cost of the edges and the holistic
         foreach (Node node in graph.getNodes()) {
             print("Node: " + node.name + " holstic: " + node.getHolistic());
             List<Edge> tempList =  node.GetEdges();
@@ -38,6 +39,4 @@ public class GenerateGraph : MonoBehaviour{
             }
         }
     }
-
-
 }
