@@ -6,19 +6,19 @@ public class Edge
 {
     Node _from;
     Node _to;
-    int _cost;
+    int _distance;
 
-    public Edge(ref Node from, ref Node to, int cost){
+    public Edge(ref Node from, ref Node to, int distance){
         _from = from;
         _to = to;
-        _cost = cost;
+        _distance = distance;
     }
 
     public Edge(Node from, Node to, int cost)
     {
         _from = from;
         _to = to;
-        _cost = cost;
+        _distance = cost;
     }
 
     public Edge(){
@@ -27,7 +27,11 @@ public class Edge
     public void setEdge(ref Node from, ref Node to, int cost){
         _from = from;
         _to = to;
-        _cost = cost;
+        _distance = cost;
+    }
+
+    public void setDistance(float distance){
+        _distance = distance;
     }
 
     public Node getNodeFrom(){
@@ -38,5 +42,5 @@ public class Edge
         return _to;
     }
 
-    public int getCost() { return _cost; }
+    public int getDistance() { return _distance; }
 }

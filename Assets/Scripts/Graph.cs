@@ -113,18 +113,21 @@ public class Graph
                 minCost = cost;
                 smallestNodeCostIndex = i;
             }
+            if(edge.GetTo().getWalkedPath() == -1)
+            {
+                edge.getNodeTo().setDistance(cost);
+                edge.getNodeTo().setWalkedPath(edge.getDistance() + node.getWalkedPath());
+            }
         }
+        
+
         toAnalize.Enqueue(node.GetEdges()[smallestNodeCostIndex].getNodeTo());
+        
 
         for(int i = 0; i <= node.GetEdges().Count; i++){
             if(i != smallestNodeCostIndex) {
                 hold.Enqueue(node.GetEdges()[i].getNodeTo());
             }
         }
-    }
-
-    void generateGraph()
-    {
-
     }
 }

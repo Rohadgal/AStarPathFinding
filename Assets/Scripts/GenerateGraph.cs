@@ -35,7 +35,7 @@ public class GenerateGraph : MonoBehaviour{
             print("Node: " + node.name + " holstic: " + node.getHolistic());
             List<Edge> tempList =  node.GetEdges();
             foreach (Edge edge in tempList) {
-                print("From: " + edge.getNodeFrom().name + " to: " + edge.getNodeTo().name + " with cost: " + edge.getCost());
+                print("From: " + edge.getNodeFrom().name + " to: " + edge.getNodeTo().name + " with cost: " + edge.getDistance());
             }
         }
     }

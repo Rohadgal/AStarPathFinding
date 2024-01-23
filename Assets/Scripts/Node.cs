@@ -12,13 +12,19 @@ public class Node : MonoBehaviour{
     bool _endNode;
     [SerializeField]
     float _radius = 3.0f;
+    float _walkedPath;
+    float _cost;
 
     /* Setters */
+    public Node(){
+        _walkedPath = -1;
+    }
 
     public Node(Vector2 pos, List<Edge> edges, int holistic){
         this.pos = pos;
         this._edges = edges;
         this._holistic = holistic;
+        _walkedPath = -1;
     }
 
     public void setEdgeList(List<Edge> edges){
@@ -33,6 +39,16 @@ public class Node : MonoBehaviour{
         _holistic = (int)Vector2.Distance(from.position, to.position);
     }
 
+    public void setCost(float cost)
+    {
+        _cost = cost;
+    }
+
+    public void setWalkedPath(float walkedPath)
+    {
+        _walkedPath = walkedPath;
+    }
+
     /* Getters */
 
     public Edge getCorretEdge()
@@ -45,6 +61,10 @@ public class Node : MonoBehaviour{
     public List<Edge> GetEdges() { return _edges; }
 
     public int getHolistic() { return _holistic; }
+
+    public float getCost() { return _cost; }
+
+    public float getWalkedPath() { return _walkedPath; }
 
     public void checkNodesInArea(){
         float radius = _radius;
