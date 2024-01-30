@@ -1,3 +1,4 @@
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,8 +7,12 @@ using UnityEngine;
 public class Graph 
 { 
     List<Node> nodes;
-    Queue<Node> toAnalize = new Queue<Node>();
-    Queue<Node> visited = new Queue<Node>();
+    List<Node> toAnalize = new List<Node>();
+    List<Node> shortestPath = new List<Node>();
+    List<Node> visited = new List<Node>();
+    Node initialNode;
+    Node goalNode;
+    bool isAStarFound;
 
     public Graph(){
         nodes = new List<Node>();
@@ -92,19 +97,25 @@ public class Graph
         
     }
 
-    public void AStar(){
-        
+    public void AStar(Node initialNode){
+        Analize(initialNode);
+        while (!isAStarFound){
+            Analize(toAnalize[0]);
+        }
+        setShortestPath();
     }
 
     private void Analize(Node node){
-        Queue<Node> toAnalize = new Queue<Node>();
-        Queue<Node> hold = new Queue<Node>();
+
+        if (node.getHolistic() == 0){
+            isAStarFound = true;
+        }
         int cost = 0;
         int minCost = 0;
         int smallestNodeCostIndex = 0;
         for (int i = 0; i < node.GetEdges().Count; i++) {
             Edge edge = node.GetEdges()[i];
-            cost = edge.getNodeTo().getHolistic() + edge.getCost();
+            cost = edge.getNodeTo().getHolistic() + edge.getDistance();
             if(i == 0){
                 minCost = cost;
                 continue;
@@ -113,21 +124,35 @@ public class Graph
                 minCost = cost;
                 smallestNodeCostIndex = i;
             }
-            if(edge.GetTo().getWalkedPath() == -1)
+            if(edge.getNodeTo().getWalkedPath() == -1) // Node not visited yet
             {
-                edge.getNodeTo().setDistance(cost);
+                edge.getNodeTo().setCost(cost);
                 edge.getNodeTo().setWalkedPath(edge.getDistance() + node.getWalkedPath());
             }
-        }
-        
-
-        toAnalize.Enqueue(node.GetEdges()[smallestNodeCostIndex].getNodeTo());
-        
-
-        for(int i = 0; i <= node.GetEdges().Count; i++){
-            if(i != smallestNodeCostIndex) {
-                hold.Enqueue(node.GetEdges()[i].getNodeTo());
+            else if(edge.getNodeTo().getWalkedPath() > node.getWalkedPath() + edge.getDistance()){ // It is visited but we found a faster way 
+                edge.getNodeTo().setWalkedPath(edge.getDistance() + node.getWalkedPath());
+                edge.getNodeTo().setCost(cost);
+                edge.getNodeTo().setCorrectEdge(edge);
             }
         }
+
+        for(int i = 0; i <= node.GetEdges().Count; i++){ // The smallest node goes to "toAnalize" and the rest goes to hold
+                toAnalize.Add(node.GetEdges()[smallestNodeCostIndex].getNodeTo());
+        }
+        sortList();
     }
-}
+
+    public void sortList(){
+        toAnalize.Sort(delegate(Node c1, Node c2) {
+            return c1.getCost().CompareTo(c2.getCost()); 
+        });
+    }
+
+    public void setShortestPath(){
+        Node temp = goalNode;
+        while(temp != initialNode){
+            shortestPath.Add(temp);
+            temp = temp.getCorrectEdge().getNodeFrom();
+        }
+    }
+}   

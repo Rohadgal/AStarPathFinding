@@ -51,7 +51,7 @@ public class Node : MonoBehaviour{
 
     /* Getters */
 
-    public Edge getCorretEdge()
+    public Edge getCorrectEdge()
     {
         return _correctEdge;
     }

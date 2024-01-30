@@ -14,11 +14,11 @@ public class Edge
         _distance = distance;
     }
 
-    public Edge(Node from, Node to, int cost)
+    public Edge(Node from, Node to, int distance)
     {
         _from = from;
         _to = to;
-        _distance = cost;
+        _distance = distance;
     }
 
     public Edge(){
@@ -30,7 +30,7 @@ public class Edge
         _distance = cost;
     }
 
-    public void setDistance(float distance){
+    public void setDistance(int distance){
         _distance = distance;
     }
 
