@@ -37,7 +37,7 @@ using UnityEngine;
         CreateEdges();
 
         foreach(Node node in nodes) {
-            Debug.Log("Node name: " + node.gameObject.name);
+            Debug.LogWarning("Node name: " + node.gameObject.name);
             foreach(Edge edge in node.edges) {
                 Debug.Log("Connected to node: " + edge.connectedNode.gameObject.name);
             }
@@ -61,14 +61,31 @@ using UnityEngine;
             Node currentNode = nodes[i];
             for (int j = i + 1; j < nodes.Count; j++) {
                 Node targetNode = nodes[j];
-                float distance = Vector3.Distance(currentNode.gameObject.transform.position, targetNode.gameObject.transform.position);
-                if (distance <= edgeRadius) {
-                    // Create an edge between nodes
-                    Edge newEdge = new Edge(targetNode, distance);
-                    currentNode.edges.Add(newEdge);
-                    targetNode.edges.Add(newEdge); // For undirected graph, add edge to both nodes
-
+                // Check if an edge between currentNode and targetNode already exists
+                bool edgeExists = false;
+                foreach (Edge edge in currentNode.edges) {
+                    if (edge.connectedNode == targetNode) {
+                        edgeExists = true;
+                        break;
+                    }
                 }
+                if (!edgeExists) {
+                    float distance = Vector3.Distance(currentNode.gameObject.transform.position, targetNode.gameObject.transform.position);
+                    if (distance <= edgeRadius) {
+                        // Create an edge between nodes
+                        Edge newEdge = new Edge(targetNode, distance);
+                        currentNode.edges.Add(newEdge);
+                        targetNode.edges.Add(new Edge(currentNode, distance)); // Add edge to targetNode as well
+                    }
+                }
+            }
+        }
+    }
+    void OnDrawGizmos() {
+        foreach (Node node in nodes) {
+            foreach (Edge edge in node.edges) {
+                Gizmos.color = Color.green; // You can set any color you like
+                Gizmos.DrawLine(node.gameObject.transform.position, edge.connectedNode.gameObject.transform.position);
             }
         }
     }
