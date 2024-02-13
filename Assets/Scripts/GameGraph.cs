@@ -5,7 +5,6 @@ using UnityEngine;
 public  class GameGraph : MonoBehaviour
 {
     public float edgeRadius = 1f; // Specify the radius within which edges will be created
-    Node targetNode;
 
     public class Node {
         public float gCost;
@@ -36,9 +35,10 @@ public  class GameGraph : MonoBehaviour
        }
     }
 
-     List<Node> nodes = new List<Node>();
-     List<Node> starSearchNodes = new List<Node>();
-     List<Node> dijkstraSearchNodes = new List<Node>();
+    Node targetNode;
+    List<Node> nodes = new List<Node>();
+    List<Node> starSearchNodes = new List<Node>();
+    List<Node> dijkstraSearchNodes = new List<Node>();
     PathFinding pathFinding = new PathFinding();
 
     void Start() {
@@ -48,17 +48,19 @@ public  class GameGraph : MonoBehaviour
         // Connect nodes with edges
         CreateEdges();
 
-        //foreach(Node node in nodes) {
-        //    Debug.LogWarning("Node name: " + node.gameObject.name);
-        //    foreach(Edge edge in node.edges) {
-        //        Debug.Log("Connected to node: " + edge.connectedNode.gameObject.name);
-        //    }
+        //int it = 0;
+        //foreach (Node node in nodes) {
+
+        //    Debug.Log("index: " + it + " name: " + nodes[it].gameObject.name);
+
+        //    it++;
         //}
 
-        Debug.Log(nodes[5].gameObject.name);
+        starSearchNodes = pathFinding.AStarSearch(nodes[61], nodes[245]);
+        dijkstraSearchNodes = pathFinding.DijkstraSearch(nodes[61], nodes[245], nodes);
 
-        starSearchNodes = pathFinding.AStarSearch(nodes[5], nodes[680]);
-        dijkstraSearchNodes = DijkstraSearch(nodes[5], nodes[680]);
+       // Debug.LogWarning("Nodes in star: " + starSearchNodes.Count);
+        //Debug.LogWarning("Nodes in dijk: " + dijkstraSearchNodes.Count);
 
     }
 
@@ -73,7 +75,7 @@ public  class GameGraph : MonoBehaviour
                 i++;
             }
         }
-        Debug.Log("Nodes found: " + i);
+        //Debug.Log("Nodes found: " + i);
         Debug.Log("Nodes list amount: " + nodes.Count);
     }
 
@@ -191,53 +193,53 @@ public  class GameGraph : MonoBehaviour
     //    return path;
     //}
 
-    // Dijkstra's algorithm search to find the shortest path from startNode to targetNode
-    List<Node> DijkstraSearch(Node startNode, Node targetNode) {
-        Dictionary<Node, float> distances = new Dictionary<Node, float>();
-        Dictionary<Node, Node> previousNodes = new Dictionary<Node, Node>();
-        HashSet<Node> unvisitedNodes = new HashSet<Node>();
+    //// Dijkstra's algorithm search to find the shortest path from startNode to targetNode
+    //List<Node> DijkstraSearch(Node startNode, Node targetNode) {
+    //    Dictionary<Node, float> distances = new Dictionary<Node, float>();
+    //    Dictionary<Node, Node> previousNodes = new Dictionary<Node, Node>();
+    //    HashSet<Node> unvisitedNodes = new HashSet<Node>();
 
-        foreach (Node node in nodes) {
-            distances[node] = Mathf.Infinity;
-            previousNodes[node] = null;
-            unvisitedNodes.Add(node);
-        }
+    //    foreach (Node node in nodes) {
+    //        distances[node] = Mathf.Infinity;
+    //        previousNodes[node] = null;
+    //        unvisitedNodes.Add(node);
+    //    }
 
-        distances[startNode] = 0;
+    //    distances[startNode] = 0;
 
-        while (unvisitedNodes.Count > 0) {
-            Node currentNode = null;
-            foreach (Node node in unvisitedNodes) {
-                if (currentNode == null || distances[node] < distances[currentNode]) {
-                    currentNode = node;
-                }
-            }
+    //    while (unvisitedNodes.Count > 0) {
+    //        Node currentNode = null;
+    //        foreach (Node node in unvisitedNodes) {
+    //            if (currentNode == null || distances[node] < distances[currentNode]) {
+    //                currentNode = node;
+    //            }
+    //        }
 
-            unvisitedNodes.Remove(currentNode);
+    //        unvisitedNodes.Remove(currentNode);
 
-            if (currentNode == targetNode) {
-                break;
-            }
+    //        if (currentNode == targetNode) {
+    //            break;
+    //        }
 
-            foreach (Edge edge in currentNode.edges) {
-                float tentativeDistance = distances[currentNode] + edge.distance;
-                if (tentativeDistance < distances[edge.connectedNode]) {
-                    distances[edge.connectedNode] = tentativeDistance;
-                    previousNodes[edge.connectedNode] = currentNode;
-                }
-            }
-        }
+    //        foreach (Edge edge in currentNode.edges) {
+    //            float tentativeDistance = distances[currentNode] + edge.distance;
+    //            if (tentativeDistance < distances[edge.connectedNode]) {
+    //                distances[edge.connectedNode] = tentativeDistance;
+    //                previousNodes[edge.connectedNode] = currentNode;
+    //            }
+    //        }
+    //    }
 
-        // Construct the shortest path
-        List<Node> shortestPath = new List<Node>();
-        Node current = targetNode;
-        while (current != null) {
-            shortestPath.Add(current);
-            current = previousNodes[current];
-        }
-        shortestPath.Reverse(); // Reverse the path to get it from startNode to targetNode
-        return shortestPath;
-    }
+    //    // Construct the shortest path
+    //    List<Node> shortestPath = new List<Node>();
+    //    Node current = targetNode;
+    //    while (current != null) {
+    //        shortestPath.Add(current);
+    //        current = previousNodes[current];
+    //    }
+    //    shortestPath.Reverse(); // Reverse the path to get it from startNode to targetNode
+    //    return shortestPath;
+    //}
 
 
     //void UpdateTargetNode() {
