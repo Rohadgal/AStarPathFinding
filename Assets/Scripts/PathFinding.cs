@@ -9,11 +9,11 @@ public class PathFinding
     
     public List<GameGraph.Node> AStarSearch(GameGraph.Node startNode, GameGraph.Node targetNode) {
 
-        // Create Stopwatch instance
-        Stopwatch stopwatch = new Stopwatch();
+            //// Create Stopwatch instance
+            //Stopwatch stopwatch = new Stopwatch();
 
-        // Start measuring time
-        stopwatch.Start();
+            //// Start measuring time
+            //stopwatch.Start();
 
 
 
@@ -34,16 +34,16 @@ public class PathFinding
             closedSet.Add(currentNode);
 
             if (currentNode == targetNode) {
-                // Stop measuring time
-                stopwatch.Stop();
+                    //// Stop measuring time
+                    //stopwatch.Stop();
 
-                // Get elapsed time in milliseconds
-                long elapsedTimeMs = stopwatch.ElapsedMilliseconds;
-                UnityEngine.Debug.Log("Elapsed time (ms): " + elapsedTimeMs);
+                    //// Get elapsed time in milliseconds
+                    //long elapsedTimeMs = stopwatch.ElapsedMilliseconds;
+                    //UnityEngine.Debug.Log("Elapsed time (ms): " + elapsedTimeMs);
 
-                // Get elapsed time in ticks
-                long elapsedTimeTicks = stopwatch.ElapsedTicks;
-                UnityEngine.Debug.Log("Elapsed time (ticks): " + elapsedTimeTicks);
+                    //// Get elapsed time in ticks
+                    //long elapsedTimeTicks = stopwatch.ElapsedTicks;
+                    //UnityEngine.Debug.Log("Elapsed time (ticks): " + elapsedTimeTicks);
 
                 // Found the target node, reconstruct the path
                 return RetracePath(startNode, targetNode); 
@@ -93,11 +93,11 @@ public class PathFinding
 
     // Dijkstra's algorithm search to find the shortest path from startNode to targetNode
     public List<GameGraph.Node> DijkstraSearch(GameGraph.Node startNode, GameGraph.Node targetNode, List<GameGraph.Node> nodes) {
-        // Create Stopwatch instance
-        Stopwatch dstopwatch = new Stopwatch();
+            //// Create Stopwatch instance
+            //Stopwatch dstopwatch = new Stopwatch();
 
-        // Start measuring time
-        dstopwatch.Start();
+            //// Start measuring time
+            //dstopwatch.Start();
         Dictionary<GameGraph.Node, float> distances = new Dictionary<GameGraph.Node, float>();
         Dictionary<GameGraph.Node, GameGraph.Node> previousNodes = new Dictionary<GameGraph.Node, GameGraph.Node>();
         HashSet<GameGraph.Node> unvisitedNodes = new HashSet<GameGraph.Node>();
@@ -141,16 +141,16 @@ public class PathFinding
             current = previousNodes[current];
         }
         shortestPath.Reverse(); // Reverse the path to get it from startNode to targetNode
-        // Stop measuring time
-        dstopwatch.Stop();
+            //// Stop measuring time
+            //dstopwatch.Stop();
 
-        // Get elapsed time in milliseconds
-        long elapsedTimeMs = dstopwatch.ElapsedMilliseconds;
-        UnityEngine.Debug.Log("dElapsed time (ms): " + elapsedTimeMs);
+            //// Get elapsed time in milliseconds
+            //long elapsedTimeMs = dstopwatch.ElapsedMilliseconds;
+            //UnityEngine.Debug.Log("dElapsed time (ms): " + elapsedTimeMs);
 
-        // Get elapsed time in ticks
-        long elapsedTimeTicks = dstopwatch.ElapsedTicks;
-        UnityEngine.Debug.Log("dElapsed time (ticks): " + elapsedTimeTicks);
+            //// Get elapsed time in ticks
+            //long elapsedTimeTicks = dstopwatch.ElapsedTicks;
+            //UnityEngine.Debug.Log("dElapsed time (ticks): " + elapsedTimeTicks);
 
         return shortestPath;
     }

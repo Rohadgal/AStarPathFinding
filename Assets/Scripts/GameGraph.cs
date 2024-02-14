@@ -5,6 +5,8 @@ using UnityEngine;
 public  class GameGraph : MonoBehaviour
 {
     public float edgeRadius = 1f; // Specify the radius within which edges will be created
+    public GameObject playerPos;
+    public GameObject enemyPos;
 
     public class Node {
         public float gCost;
@@ -35,7 +37,8 @@ public  class GameGraph : MonoBehaviour
        }
     }
 
-    Node targetNode;
+    Node playerTargetNode;
+    Node enemySourceNode;
     List<Node> nodes = new List<Node>();
     List<Node> starSearchNodes = new List<Node>();
     List<Node> dijkstraSearchNodes = new List<Node>();
@@ -56,12 +59,19 @@ public  class GameGraph : MonoBehaviour
         //    it++;
         //}
 
-        starSearchNodes = pathFinding.AStarSearch(nodes[61], nodes[245]);
-        dijkstraSearchNodes = pathFinding.DijkstraSearch(nodes[61], nodes[245], nodes);
+        
 
        // Debug.LogWarning("Nodes in star: " + starSearchNodes.Count);
         //Debug.LogWarning("Nodes in dijk: " + dijkstraSearchNodes.Count);
 
+    }
+
+    private void Update() {
+        UpdateSourceNode();
+        UpdateTargetNode();
+
+        starSearchNodes = pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
+        dijkstraSearchNodes = pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes);
     }
 
     void FindNodesInScene() {
@@ -128,6 +138,36 @@ public  class GameGraph : MonoBehaviour
                     Gizmos.color = Color.blue;
                     Gizmos.DrawLine(node.gameObject.transform.position, edge.connectedNode.gameObject.transform.position);
                 }
+            }
+        }
+    }
+
+    void UpdateTargetNode() {
+        // Get the player's position
+        Vector3 playerPosition = playerPos.gameObject.transform.position; //GetPlayerPosition(); // Implement this method to get the player's position
+
+        // Find the closest node to the player's position
+        float minDistance = Mathf.Infinity;
+        foreach (Node node in nodes) {
+            float distance = Vector3.Distance(playerPosition, node.gameObject.transform.position);
+            if (distance < minDistance) {
+                minDistance = distance;
+                playerTargetNode = node;
+            }
+        }
+    }
+
+    void UpdateSourceNode() {
+        // Get the player's position
+        Vector3 enemyPosition = enemyPos.gameObject.transform.position; //GetPlayerPosition(); // Implement this method to get the player's position
+
+        // Find the closest node to the player's position
+        float minDistance = Mathf.Infinity;
+        foreach (Node node in nodes) {
+            float distance = Vector3.Distance(enemyPosition, node.gameObject.transform.position);
+            if (distance < minDistance) {
+                minDistance = distance;
+                enemySourceNode = node;
             }
         }
     }
@@ -242,18 +282,5 @@ public  class GameGraph : MonoBehaviour
     //}
 
 
-    //void UpdateTargetNode() {
-    //    // Get the player's position
-    //    Vector3 playerPosition = GetPlayerPosition(); // Implement this method to get the player's position
 
-    //    // Find the closest node to the player's position
-    //    float minDistance = Mathf.Infinity;
-    //    foreach (Node node in nodes) {
-    //        float distance = Vector3.Distance(playerPosition, node.gameObject.transform.position);
-    //        if (distance < minDistance) {
-    //            minDistance = distance;
-    //            targetNode = node;
-    //        }
-    //    }
-    //}
 }
