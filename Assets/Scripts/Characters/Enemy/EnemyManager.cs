@@ -24,6 +24,10 @@ public class EnemyManager : MonoBehaviour
     EnemyState enemyState;
     Animator animator;
     Vector3 startPos;
+    Vector3 playerPos;
+    Vector3 currentPlayerPos;
+    public float updateDistance = 5f;
+    //float minDistToPlayer = Mathf.Infinity;
 
     public float moveSpeed = 5f, rotationSpeed = 3f; // Speed at which the enemy moves
     public float arrivalThreshold, catchPlayerThreshold = 0.1f; // Distance threshold to consider the enemy has reached a node
@@ -41,9 +45,19 @@ public class EnemyManager : MonoBehaviour
         // Start moving towards the first node
         //MoveToNode(starPath[currentNodeIndex]);
         ChangeEnemyState(EnemyState.Idle);
+        playerPos = playerTarget.transform.position;
+        //playerPos = currentPlayerPos;
+    }
+
+    void updateNode() {
+        currentNodeIndex = 0;
+        starPath = gameGraph.starSearchNodes;
+        MoveToNode(starPath[currentNodeIndex]);
     }
 
     private void Update() {
+
+        
 
         if(LevelManager.s_instance.GetLevelState() == LevelState.Playing) {
             isChasing = true;
@@ -72,6 +86,28 @@ public class EnemyManager : MonoBehaviour
 
         if (isChasing) {
 
+            if (Vector3.Distance(playerTarget.transform.position, playerPos) > updateDistance) {
+                playerPos = playerTarget.transform.position;
+                updateNode();
+            }
+
+            //float distToPlayer = Vector3.Distance(transform.position, playerTarget.transform.position);
+
+            //if (distToPlayer <= minDistToPlayer - 10f) {
+            //    minDistToPlayer = distToPlayer;
+            //    currentNodeIndex = 0;
+            //    starPath = gameGraph.starSearchNodes;
+            //    MoveToNode(starPath[currentNodeIndex]);
+            //    Debug.Log("Updated nodes");
+            //}
+
+            if (hasCaughtPlayer) {
+                PlayerManager.instance.ChangePlayerState(PlayerState.Caught);
+                LevelManager.s_instance.changeLevelState(LevelState.GameOver);
+                hasCaughtPlayer = false;
+                //enabled = false;
+                return;
+            }
             //if(gameGraph.starSearchNodes != currentPath) {
             //    starPath = gameGraph.starSearchNodes;
             //    currentPath = starPath;
@@ -88,13 +124,7 @@ public class EnemyManager : MonoBehaviour
                     Debug.Log("Enemy reached the last node.");
                     ChangeEnemyState(EnemyState.Idle);
                     //enabled = false; // Disable this script
-                    if (hasCaughtPlayer) {
-                        PlayerManager.instance.ChangePlayerState(PlayerState.Caught);
-                        LevelManager.s_instance.changeLevelState(LevelState.GameOver);
-                        hasCaughtPlayer= false;
-                        //enabled = false;
-                        return;
-                    }
+                    
                     currentNodeIndex = 0;
                     starPath = gameGraph.starSearchNodes;
                     MoveToNode(starPath[currentNodeIndex]);

@@ -45,8 +45,6 @@ public  class GameGraph : MonoBehaviour
     public List<Node> dijkstraSearchNodes = new List<Node>();
     PathFinding pathFinding = new PathFinding();
 
-    public bool positionUpdated = false;
-
 
     private void Awake() {
 

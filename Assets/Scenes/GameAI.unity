@@ -77977,6 +77977,7 @@ MonoBehaviour:
   hasReachedTarget: 0
   gameGraph: {fileID: 954448152}
   playerTarget: {fileID: 4844541113231378405}
+  updateDistance: 15
   moveSpeed: 3
   rotationSpeed: 3
   arrivalThreshold: 1

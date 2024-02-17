@@ -22,6 +22,8 @@ public class PlayerManager : MonoBehaviour
     Quaternion rotPos;
     //Transform startPos;
 
+    Vector3 playerPos;
+
     private void Awake() {
         instance = this;
         playerState = PlayerState.None;
@@ -29,6 +31,7 @@ public class PlayerManager : MonoBehaviour
     void Start() {
         animator = GetComponent<Animator>();
         rotPos = transform.transform.rotation;
+        playerPos = transform.position;
         //startPos = transform.position;
     }
 
