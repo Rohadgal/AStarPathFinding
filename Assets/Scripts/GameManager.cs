@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
-    [SerializeField] GameObject canvas, winUI, gameOverUI, creditsUI;
+    [SerializeField] GameObject canvas, mainMenuUI, winUI, gameOverUI, creditsUI;
 
     private void Awake() {
         if (canvas != null && SceneManager.GetActiveScene().buildIndex != mainMenuScene) {
