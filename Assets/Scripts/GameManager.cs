@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public enum GameState {
     None,
     LoadMenu,
-    ChangeLevel,
+    //ChangeLevel,
     Playing,
     GameOver,
     GameFinished
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         levelIndex = SceneManager.GetActiveScene().buildIndex;
         //Debug.Log("Manager ChangeScene");
 
-        if (SceneManager.GetActiveScene().name == "LevelThree") {
+        if (SceneManager.GetActiveScene().name == "GameAI") {
             m_gameState = GameState.GameFinished;
             Debug.Log("Corutina!!!!");
             StartCoroutine(openCredits());
@@ -92,8 +92,8 @@ public class GameManager : MonoBehaviour
             // case GameState.StartGame:
             //startGame();
             //break;
-            case GameState.ChangeLevel:
-                break;
+            //case GameState.ChangeLevel:
+            //    break;
             case GameState.Playing:
                 break;
             case GameState.GameOver:

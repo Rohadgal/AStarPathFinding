@@ -83,4 +83,11 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         Destroy(gameObject);
     }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.tag == "SafeZone") {
+            Debug.Log("GameFinished");
+            GameManager.s_instance.changeGameSate(GameState.GameFinished);
+        }
+    }
 }
