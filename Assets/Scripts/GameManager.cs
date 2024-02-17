@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public enum GameState {
     None,
-    LoadMenu,
+    Menu,
     //ChangeLevel,
     Playing,
     GameOver,
@@ -20,63 +20,49 @@ public class GameManager : MonoBehaviour
 
     #region Private
     private GameState m_gameState;
-    int mainMenuScene = 0, levelIndex;
     bool isCoroutineActivated;
     #endregion
 
 
-    [SerializeField] GameObject canvas, mainMenuUI, winUI, gameOverUI, creditsUI;
+    [SerializeField] 
+    GameObject canvas, mainMenuUI, winUI, gameOverUI, creditsUI;
 
     private void Awake() {
-        if (canvas != null && SceneManager.GetActiveScene().buildIndex != mainMenuScene) {
-            canvas.SetActive(false);
+        if (canvas != null) {
             winUI.SetActive(false);
             gameOverUI.SetActive(false);
             creditsUI.SetActive(false);
+            canvas.SetActive(true);
+            mainMenuUI.SetActive(true);
             DontDestroyOnLoad(gameObject);
         }
+
+       
         if (FindObjectOfType<GameManager>() != null &&
             FindObjectOfType<GameManager>().gameObject != gameObject) {
             Destroy(gameObject);
             return;
         }
+
         DontDestroyOnLoad(gameObject);
         s_instance = this;
         m_gameState = GameState.None;
 
     }
 
+
     private void Update() {
-        if (m_gameState == GameState.GameOver) {
-            gameOver();
-        }
-        if (m_gameState == GameState.GameFinished && !isCoroutineActivated) {
-            isCoroutineActivated = true;
-            gameFinished();
-        }
-    }
-
-    public void changeScene() {
-        levelIndex = SceneManager.GetActiveScene().buildIndex;
-        //Debug.Log("Manager ChangeScene");
-
-        if (SceneManager.GetActiveScene().name == "GameAI") {
-            m_gameState = GameState.GameFinished;
-            Debug.Log("Corutina!!!!");
-            StartCoroutine(openCredits());
-            return;
-        }
-
-        //Debug.Log("Hasta aca lleg?");
-        if (levelIndex < SceneManager.sceneCountInBuildSettings - 1) {
-            //Debug.Log("eeeeee");
-            levelIndex++;
-            SceneManager.LoadScene(levelIndex);
-        }
-        //else {
-        //    m_gameState = GameState.GameFinished;
+        //if (m_gameState == GameState.GameOver) {
+        //    gameOver();
         //}
+        //if (m_gameState == GameState.GameFinished) {
+        //    // isCoroutineActivated = true;
+        //    Debug.Log("manager finisehd game");
+        //    gameFinished();
+        //}
+       
     }
+
 
     public void changeGameSate(GameState t_newState) {
         if (m_gameState == t_newState) {
@@ -86,77 +72,90 @@ public class GameManager : MonoBehaviour
         switch (m_gameState) {
             case GameState.None:
                 break;
-            case GameState.LoadMenu:
-                loadMainMenu();
+            case GameState.Menu:
+                //loadMainMenu();
                 break;
             // case GameState.StartGame:
             //startGame();
             //break;
-            //case GameState.ChangeLevel:
-            //    break;
             case GameState.Playing:
+                setCanvasOff();
+                LevelManager.s_instance.changeLevelState(LevelState.Playing);
                 break;
             case GameState.GameOver:
-                //gameOver();
+                gameOver();
                 break;
             case GameState.GameFinished:
+                Debug.Log("manager finisehd game");
+                gameFinished();
                 break;
             default:
                 throw new UnityException("Invalid Game State");
         }
     }
 
-    public GameState getGameState() {
-        return m_gameState;
+    //public GameState getGameState() {
+    //    return m_gameState;
+    //}
+
+    public void setCanvasOff() {
+        Debug.Log("Canvas off");
+        canvas.SetActive(false);
     }
 
-    public void startGame() {
-        changeGameSate(GameState.Playing);
-    }
-
-    IEnumerator openCredits() {
+    public void openCredits() {
         //float waitTimeForCredits = 4f;
-        yield return new WaitForSeconds(4f);
-        winUI.SetActive(false);
+        winUI.SetActive(false );
+        gameOverUI.SetActive(false );
+        mainMenuUI.SetActive(false);
         creditsUI.SetActive(true);
     }
 
-    public void loadMainMenu() {
-        SceneManager.LoadScene("MainMenu");
+    public void mainMenu() {
+        gameOverUI.SetActive(false);
+        winUI.SetActive(false);
+        creditsUI.SetActive(false);
+        mainMenuUI.SetActive(true);
+    }
+
+    public void startGame() {
+        //canvas.SetActive(false);
+        changeGameSate(GameState.Playing);
     }
 
     void gameOver() {
         if (canvas != null) {
-            StartCoroutine(slowDownGameOverCanvas());
+            // StartCoroutine(slowDownGameOverCanvas());
+            mainMenuUI.SetActive(false);
+            winUI.SetActive(false);
+            canvas.SetActive(true);
+            gameOverUI.SetActive(true);
         }
+        LevelManager.s_instance.changeLevelState(LevelState.None);
     }
 
     void gameFinished() {
+        Debug.Log("thisss");
         if (canvas != null) {
+            mainMenuUI.SetActive(false);
+            gameOverUI.SetActive(false);
             canvas.SetActive(true);
             winUI.SetActive(true);
         }
-
-        //if (SceneManager.GetActiveScene().name == "LevelThree1" && !isCoroutineActivated) {
-        //    isCoroutineActivated=true;
-        //    //canvas.SetActive(true);
-        //    //StartCoroutine(openCredits());
-        //    Debug.LogError("YAAAA");
-        //}
+        LevelManager.s_instance.changeLevelState(LevelState.None);
     }
 
-    IEnumerator slowDownGameOverCanvas() {
-        yield return new WaitForSeconds(4f);
-        canvas.SetActive(true);
-        gameOverUI.SetActive(true);
-    }
+    //IEnumerator slowDownGameOverCanvas() {
+    //    yield return new WaitForSeconds(4f);
+    //    canvas.SetActive(true);
+    //    gameOverUI.SetActive(true);
+    //}
 
     public void exitGame() {
         Application.Quit();
     }
 
-    public void retryLevel() {
-        levelIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(levelIndex);
-    }
+    //public void retryLevel() {
+    //    SceneManager.LoadScene(gameScene);
+    //}
 }

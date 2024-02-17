@@ -8,7 +8,8 @@ public enum PlayerState {
     Idle,
     Running,
     RunningBack,
-    Dead
+    Caught,
+    Safe
 }
 
 public class PlayerManager : MonoBehaviour
@@ -16,6 +17,10 @@ public class PlayerManager : MonoBehaviour
     Animator animator;
     public static PlayerManager instance;
     PlayerState playerState;
+    bool playerCanMove;
+    Vector3 startPos = Vector3.zero;
+    Quaternion rotPos;
+    //Transform startPos;
 
     private void Awake() {
         instance = this;
@@ -23,11 +28,22 @@ public class PlayerManager : MonoBehaviour
     }
     void Start() {
         animator = GetComponent<Animator>();
+        rotPos = transform.transform.rotation;
+        //startPos = transform.position;
     }
 
     private void Update() {
-        if (playerState == PlayerState.Dead) {
-            LevelManager.s_instance.changeLevelState(LevelState.GameOver);
+        if(LevelManager.s_instance.GetLevelState() == LevelState.Playing) {
+            playerCanMove = true;
+        }
+
+        if (playerState == PlayerState.Caught) {
+            ChangePlayerState(PlayerState.None);
+            //LevelManager.s_instance.changeLevelState(LevelState.GameOver);
+        }
+
+        if(playerState == PlayerState.Safe) {   
+            ChangePlayerState(PlayerState.None);
         }
     }
     public void ChangePlayerState(PlayerState newState) {
@@ -54,8 +70,17 @@ public class PlayerManager : MonoBehaviour
                 Debug.Log("RunningBack");
                 animator.SetBool("isRunningBack", true);
                 break;
-            case PlayerState.Dead:
-                animator.SetBool("isDead", true);
+            case PlayerState.Caught:
+                transform.position = startPos;
+                transform.rotation = rotPos;
+                playerCanMove = false;
+                //animator.SetBool("isDead", true);
+                break;
+            case PlayerState.Safe:
+                transform.position = startPos;
+                transform.rotation = rotPos;
+                playerCanMove = false;
+                //animator.SetBool("isDead", true);
                 break;
             default: break;
         }
@@ -72,7 +97,7 @@ public class PlayerManager : MonoBehaviour
     public Animator getAnimator() { return animator; }
 
     private bool IsDead() {
-        if (PlayerManager.instance.GetState() != PlayerState.Dead) {
+        if (PlayerManager.instance.GetState() != PlayerState.Caught) {
             return false;
         }
         StartCoroutine(DestroyPlayer());
@@ -87,7 +112,10 @@ public class PlayerManager : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "SafeZone") {
             Debug.Log("GameFinished");
-            GameManager.s_instance.changeGameSate(GameState.GameFinished);
+            ChangePlayerState(PlayerState.Safe);
+            LevelManager.s_instance.changeLevelState(LevelState.LevelFinished);
         }
     }
+
+    public bool getPlayerCanMove() {  return playerCanMove; }
 }

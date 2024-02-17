@@ -4,6 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.UIElements;
 public enum EnemyState {
     None,
     Idle,
@@ -22,25 +23,45 @@ public class EnemyManager : MonoBehaviour
     GameObject playerTarget;
     EnemyState enemyState;
     Animator animator;
+    Vector3 startPos;
 
     public float moveSpeed = 5f, rotationSpeed = 3f; // Speed at which the enemy moves
     public float arrivalThreshold, catchPlayerThreshold = 0.1f; // Distance threshold to consider the enemy has reached a node
 
     List<GameGraph.Node> starPath;// = gameGraph.starSearchNodes;
+    List<GameGraph.Node> currentPath;
     private int currentNodeIndex = 0; // Index of the current node the enemy is moving towards
 
 
     private void Start() {
         animator = GetComponent<Animator>();
-        if (isChasing) {
-            starPath = gameGraph.starSearchNodes;
-        }
+        startPos = transform.position;
+        starPath = gameGraph.starSearchNodes;
+        currentPath = starPath;
         // Start moving towards the first node
-        MoveToNode(starPath[currentNodeIndex]);
-        ChangeEnemyState(EnemyState.Chasing);
+        //MoveToNode(starPath[currentNodeIndex]);
+        ChangeEnemyState(EnemyState.Idle);
     }
 
     private void Update() {
+
+        if(LevelManager.s_instance.GetLevelState() == LevelState.Playing) {
+            isChasing = true;
+            ChangeEnemyState(EnemyState.Chasing);
+        }
+
+        if(LevelManager.s_instance.GetLevelState() == LevelState.LevelFinished||
+            LevelManager.s_instance.GetLevelState()== LevelState.GameOver
+            || LevelManager.s_instance.GetLevelState() == LevelState.None) {
+            hasCaughtPlayer = false;
+            isChasing=false;
+            ChangeEnemyState(EnemyState.Idle);
+            transform.position = startPos;
+            starPath = gameGraph.starSearchNodes;
+            currentNodeIndex = 0;
+            MoveToNode(starPath[currentNodeIndex]);
+        }
+        
 
         if (Vector3.Distance(playerTarget.transform.position, transform.position) <= catchPlayerThreshold){
             Debug.LogWarning("has caught player");
@@ -50,7 +71,14 @@ public class EnemyManager : MonoBehaviour
         //transform.LookAt(starPath[currentNodeIndex].gameObject.transform.position);
 
         if (isChasing) {
-            enemyState = EnemyState.Chasing;
+
+            //if(gameGraph.starSearchNodes != currentPath) {
+            //    starPath = gameGraph.starSearchNodes;
+            //    currentPath = starPath;
+            //    currentNodeIndex = 0;
+            //}
+
+            //enemyState = EnemyState.Chasing;
             MoveToNode(starPath[currentNodeIndex]);
             // If the enemy has reached the current node, move to the next node
             if (Vector3.Distance(transform.position, starPath[currentNodeIndex].position) <= arrivalThreshold) {
@@ -61,7 +89,10 @@ public class EnemyManager : MonoBehaviour
                     ChangeEnemyState(EnemyState.Idle);
                     //enabled = false; // Disable this script
                     if (hasCaughtPlayer) {
-                        enabled = false;
+                        PlayerManager.instance.ChangePlayerState(PlayerState.Caught);
+                        LevelManager.s_instance.changeLevelState(LevelState.GameOver);
+                        hasCaughtPlayer= false;
+                        //enabled = false;
                         return;
                     }
                     currentNodeIndex = 0;
@@ -111,11 +142,9 @@ public class EnemyManager : MonoBehaviour
             case EnemyState.None:
                 break;
             case EnemyState.Idle:
-                Debug.Log("Idle");
                 animator.SetBool("isIdle", true);
                 break;
             case EnemyState.Chasing:
-                Debug.Log("Running");
                 animator.SetBool("isChasing", true);
                 break;
             case EnemyState.busy:

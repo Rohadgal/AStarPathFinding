@@ -45,6 +45,8 @@ public  class GameGraph : MonoBehaviour
     public List<Node> dijkstraSearchNodes = new List<Node>();
     PathFinding pathFinding = new PathFinding();
 
+    public bool positionUpdated = false;
+
 
     private void Awake() {
 
@@ -98,7 +100,7 @@ public  class GameGraph : MonoBehaviour
             }
         }
         //Debug.Log("Nodes found: " + i);
-        Debug.Log("Nodes list amount: " + nodes.Count);
+       // Debug.Log("Nodes list amount: " + nodes.Count);
     }
 
     void CreateEdges() {

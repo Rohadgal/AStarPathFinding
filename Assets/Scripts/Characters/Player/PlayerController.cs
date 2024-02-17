@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate() {
 
-        if (PlayerManager.instance.GetState() != PlayerState.Dead) {
+        if (PlayerManager.instance.getPlayerCanMove()) {
             moveAround();
             return;
         }
