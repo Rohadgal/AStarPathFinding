@@ -32,16 +32,14 @@ public class EnemyManager : MonoBehaviour
     public float moveSpeed = 5f, rotationSpeed = 3f; // Speed at which the enemy moves
     public float arrivalThreshold, catchPlayerThreshold = 0.1f; // Distance threshold to consider the enemy has reached a node
 
-    List<GameGraph.Node> starPath;// = gameGraph.starSearchNodes;
-    List<GameGraph.Node> currentPath;
+    List<GameGraph.Node> nodesPath;// = gameGraph.starSearchNodes;
     private int currentNodeIndex = 0; // Index of the current node the enemy is moving towards
 
 
     private void Start() {
         animator = GetComponent<Animator>();
         startPos = transform.position;
-        starPath = gameGraph.starSearchNodes;
-        currentPath = starPath;
+        nodesPath = gameGraph.nodesPath;
         // Start moving towards the first node
         //MoveToNode(starPath[currentNodeIndex]);
         ChangeEnemyState(EnemyState.Idle);
@@ -49,10 +47,11 @@ public class EnemyManager : MonoBehaviour
         //playerPos = currentPlayerPos;
     }
 
-    void updateNode() {
+    void updateNodes() {
+        ChangeEnemyState(EnemyState.Idle);
         currentNodeIndex = 0;
-        starPath = gameGraph.starSearchNodes;
-        MoveToNode(starPath[currentNodeIndex]);
+        nodesPath = gameGraph.nodesPath;
+        MoveToNode(nodesPath[currentNodeIndex]);
     }
 
     private void Update() {
@@ -71,9 +70,9 @@ public class EnemyManager : MonoBehaviour
             isChasing=false;
             ChangeEnemyState(EnemyState.Idle);
             transform.position = startPos;
-            starPath = gameGraph.starSearchNodes;
+            nodesPath = gameGraph.starSearchNodes;
             currentNodeIndex = 0;
-            MoveToNode(starPath[currentNodeIndex]);
+            MoveToNode(nodesPath[currentNodeIndex]);
         }
         
 
@@ -88,18 +87,8 @@ public class EnemyManager : MonoBehaviour
 
             if (Vector3.Distance(playerTarget.transform.position, playerPos) > updateDistance) {
                 playerPos = playerTarget.transform.position;
-                updateNode();
+                updateNodes();
             }
-
-            //float distToPlayer = Vector3.Distance(transform.position, playerTarget.transform.position);
-
-            //if (distToPlayer <= minDistToPlayer - 10f) {
-            //    minDistToPlayer = distToPlayer;
-            //    currentNodeIndex = 0;
-            //    starPath = gameGraph.starSearchNodes;
-            //    MoveToNode(starPath[currentNodeIndex]);
-            //    Debug.Log("Updated nodes");
-            //}
 
             if (hasCaughtPlayer) {
                 PlayerManager.instance.ChangePlayerState(PlayerState.Caught);
@@ -108,31 +97,26 @@ public class EnemyManager : MonoBehaviour
                 //enabled = false;
                 return;
             }
-            //if(gameGraph.starSearchNodes != currentPath) {
-            //    starPath = gameGraph.starSearchNodes;
-            //    currentPath = starPath;
-            //    currentNodeIndex = 0;
-            //}
 
-            //enemyState = EnemyState.Chasing;
-            MoveToNode(starPath[currentNodeIndex]);
+            MoveToNode(nodesPath[currentNodeIndex]);
             // If the enemy has reached the current node, move to the next node
-            if (Vector3.Distance(transform.position, starPath[currentNodeIndex].position) <= arrivalThreshold) {
+            if (Vector3.Distance(transform.position, nodesPath[currentNodeIndex].position) <= arrivalThreshold) {
                 currentNodeIndex++;
                 // If there are no more nodes, the enemy has reached the end of the path
-                if (currentNodeIndex >= starPath.Count) {
+                if (currentNodeIndex >= nodesPath.Count) {
                     Debug.Log("Enemy reached the last node.");
                     ChangeEnemyState(EnemyState.Idle);
                     //enabled = false; // Disable this script
                     
-                    currentNodeIndex = 0;
-                    starPath = gameGraph.starSearchNodes;
-                    MoveToNode(starPath[currentNodeIndex]);
+                    //currentNodeIndex = 0;
+                    //nodesPath = gameGraph.nodesPath;
+                    //MoveToNode(nodesPath[currentNodeIndex]);
+                    updateNodes();
                     ChangeEnemyState(EnemyState.Chasing);
                 }
 
                 // Move to the next node
-                MoveToNode(starPath[currentNodeIndex]);
+                MoveToNode(nodesPath[currentNodeIndex]);
             }
             
         }

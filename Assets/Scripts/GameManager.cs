@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     #region Private
     private GameState m_gameState;
-    bool isCoroutineActivated;
+    bool isCoroutineActivated, isEasyMode = true;
     #endregion
 
 
@@ -122,6 +122,18 @@ public class GameManager : MonoBehaviour
         //canvas.SetActive(false);
         changeGameSate(GameState.Playing);
     }
+
+    public void easy() {
+        isEasyMode = true;
+        Debug.Log("mode: " + isEasyMode);
+    }
+
+    public void hard() {
+        isEasyMode = false;
+        Debug.Log("mode: " + isEasyMode);
+    }
+
+    public bool getIsEasyMode() { return isEasyMode; }
 
     void gameOver() {
         if (canvas != null) {

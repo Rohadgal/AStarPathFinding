@@ -43,6 +43,7 @@ public  class GameGraph : MonoBehaviour
     List<Node> nodes = new List<Node>();
     public List<Node> starSearchNodes = new List<Node>();
     public List<Node> dijkstraSearchNodes = new List<Node>();
+    public List<Node> nodesPath = new List<Node>();
     PathFinding pathFinding = new PathFinding();
 
 
@@ -58,6 +59,7 @@ public  class GameGraph : MonoBehaviour
 
         starSearchNodes = pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
         dijkstraSearchNodes = pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes);
+        nodesPath = (GameManager.s_instance.getIsEasyMode()) ? pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes) : pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
     }
     void Start() {
         // Find node GameObjects in the scene and add them to the graph
@@ -81,6 +83,8 @@ public  class GameGraph : MonoBehaviour
     private void Update() {
         UpdateSourceNode();
         UpdateTargetNode();
+
+        nodesPath = (GameManager.s_instance.getIsEasyMode()) ? pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes) : pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
 
         starSearchNodes = pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
         dijkstraSearchNodes = pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes);
