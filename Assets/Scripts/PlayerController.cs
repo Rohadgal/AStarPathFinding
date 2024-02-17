@@ -37,8 +37,8 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        PlayerManager.instance.getAnimator().SetFloat("xMove", horizontalInput);
-        PlayerManager.instance.getAnimator().SetFloat("yMove", verticalInput);
+        //PlayerManager.instance.getAnimator().SetFloat("xMove", horizontalInput);
+        //PlayerManager.instance.getAnimator().SetFloat("yMove", verticalInput);
 
         Vector3 movement = new Vector3(horizontalInput, 0, verticalInput);
 

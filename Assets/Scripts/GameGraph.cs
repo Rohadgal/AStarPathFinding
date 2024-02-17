@@ -4,6 +4,7 @@ using UnityEngine;
 
 public  class GameGraph : MonoBehaviour
 {
+    public static GameGraph s_instance;
     public float edgeRadius = 1f; // Specify the radius within which edges will be created
     public GameObject playerPos;
     public GameObject enemyPos;
@@ -40,16 +41,27 @@ public  class GameGraph : MonoBehaviour
     Node playerTargetNode;
     Node enemySourceNode;
     List<Node> nodes = new List<Node>();
-    List<Node> starSearchNodes = new List<Node>();
-    List<Node> dijkstraSearchNodes = new List<Node>();
+    public List<Node> starSearchNodes = new List<Node>();
+    public List<Node> dijkstraSearchNodes = new List<Node>();
     PathFinding pathFinding = new PathFinding();
 
-    void Start() {
-        // Find node GameObjects in the scene and add them to the graph
+
+    private void Awake() {
+
         FindNodesInScene();
 
         // Connect nodes with edges
         CreateEdges();
+
+        UpdateSourceNode();
+        UpdateTargetNode();
+
+        starSearchNodes = pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
+        dijkstraSearchNodes = pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes);
+    }
+    void Start() {
+        // Find node GameObjects in the scene and add them to the graph
+        
 
         //int it = 0;
         //foreach (Node node in nodes) {
@@ -59,9 +71,9 @@ public  class GameGraph : MonoBehaviour
         //    it++;
         //}
 
-        
 
-       // Debug.LogWarning("Nodes in star: " + starSearchNodes.Count);
+
+        // Debug.LogWarning("Nodes in star: " + starSearchNodes.Count);
         //Debug.LogWarning("Nodes in dijk: " + dijkstraSearchNodes.Count);
 
     }
@@ -171,116 +183,4 @@ public  class GameGraph : MonoBehaviour
             }
         }
     }
-
-    //// A* algorithm search to find the shortest path from startNode to targetNode
-    //List<Node> AStarSearch(Node startNode, Node targetNode) {
-    //    List<Node> openSet = new List<Node>(); // Nodes to be evaluated
-    //    HashSet<Node> closedSet = new HashSet<Node>(); // Nodes already evaluated
-
-    //    openSet.Add(startNode);
-
-    //    while (openSet.Count > 0) {
-    //        Node currentNode = openSet[0];
-    //        for (int i = 1; i < openSet.Count; i++) {
-    //            if (openSet[i].fCost < currentNode.fCost || (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)) {
-    //                currentNode = openSet[i];
-    //            }
-    //        }
-
-    //        openSet.Remove(currentNode);
-    //        closedSet.Add(currentNode);
-
-    //        if (currentNode == targetNode) {
-    //            // Found the target node, reconstruct the path
-    //            return RetracePath(startNode, targetNode);
-    //        }
-
-    //        foreach (Edge edge in currentNode.edges) {
-    //            Node neighbor = edge.connectedNode;
-
-    //            if (closedSet.Contains(neighbor)) {
-    //                continue; // Skip this neighbor as it has already been evaluated
-    //            }
-
-    //            float newCostToNeighbor = currentNode.gCost + edge.distance;
-    //            if (newCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor)) {
-    //                neighbor.gCost = newCostToNeighbor;
-    //                neighbor.hCost = Vector3.Distance(neighbor.gameObject.transform.position, targetNode.gameObject.transform.position);
-    //                neighbor.parent = currentNode;
-
-    //                if (!openSet.Contains(neighbor)) {
-    //                    openSet.Add(neighbor);
-    //                }
-    //            }
-    //        }
-    //    }
-
-    //    // Path not found
-    //    return null;
-    //}
-
-    //// Retrace the path from startNode to endNode
-    //List<Node> RetracePath(Node startNode, Node endNode) {
-    //    List<Node> path = new List<Node>();
-    //    Node currentNode = endNode;
-
-    //    while (currentNode != startNode) {
-    //        path.Add(currentNode);
-    //        currentNode = currentNode.parent;
-    //    }
-
-    //    path.Reverse(); // Reverse the path to get it from startNode to endNode
-    //    return path;
-    //}
-
-    //// Dijkstra's algorithm search to find the shortest path from startNode to targetNode
-    //List<Node> DijkstraSearch(Node startNode, Node targetNode) {
-    //    Dictionary<Node, float> distances = new Dictionary<Node, float>();
-    //    Dictionary<Node, Node> previousNodes = new Dictionary<Node, Node>();
-    //    HashSet<Node> unvisitedNodes = new HashSet<Node>();
-
-    //    foreach (Node node in nodes) {
-    //        distances[node] = Mathf.Infinity;
-    //        previousNodes[node] = null;
-    //        unvisitedNodes.Add(node);
-    //    }
-
-    //    distances[startNode] = 0;
-
-    //    while (unvisitedNodes.Count > 0) {
-    //        Node currentNode = null;
-    //        foreach (Node node in unvisitedNodes) {
-    //            if (currentNode == null || distances[node] < distances[currentNode]) {
-    //                currentNode = node;
-    //            }
-    //        }
-
-    //        unvisitedNodes.Remove(currentNode);
-
-    //        if (currentNode == targetNode) {
-    //            break;
-    //        }
-
-    //        foreach (Edge edge in currentNode.edges) {
-    //            float tentativeDistance = distances[currentNode] + edge.distance;
-    //            if (tentativeDistance < distances[edge.connectedNode]) {
-    //                distances[edge.connectedNode] = tentativeDistance;
-    //                previousNodes[edge.connectedNode] = currentNode;
-    //            }
-    //        }
-    //    }
-
-    //    // Construct the shortest path
-    //    List<Node> shortestPath = new List<Node>();
-    //    Node current = targetNode;
-    //    while (current != null) {
-    //        shortestPath.Add(current);
-    //        current = previousNodes[current];
-    //    }
-    //    shortestPath.Reverse(); // Reverse the path to get it from startNode to targetNode
-    //    return shortestPath;
-    //}
-
-
-
 }
