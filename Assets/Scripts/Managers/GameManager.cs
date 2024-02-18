@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public enum GameState {
     None,
-    Menu,
-    //ChangeLevel,
     Playing,
     GameOver,
     GameFinished
@@ -20,19 +18,21 @@ public class GameManager : MonoBehaviour
 
     #region Private
     private GameState m_gameState;
-    bool isCoroutineActivated, isEasyMode = true;
+    bool isCoroutineActivated, isEasyMode;
     #endregion
 
 
     [SerializeField] 
-    GameObject canvas, mainMenuUI, winUI, gameOverUI, creditsUI;
+    GameObject canvas, backgroundUI, mainMenuUI, winUI, gameOverUI, creditsUI, gameUI;
 
     private void Awake() {
         if (canvas != null) {
             winUI.SetActive(false);
             gameOverUI.SetActive(false);
             creditsUI.SetActive(false);
+            gameUI.SetActive(false);
             canvas.SetActive(true);
+            backgroundUI.SetActive(true);
             mainMenuUI.SetActive(true);
             //DontDestroyOnLoad(gameObject);
         }
@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         s_instance = this;
         m_gameState = GameState.None;
+        isEasyMode = true;
 
     }
 
@@ -59,14 +60,11 @@ public class GameManager : MonoBehaviour
         switch (m_gameState) {
             case GameState.None:
                 break;
-            case GameState.Menu:
-                //loadMainMenu();
-                break;
             // case GameState.StartGame:
             //startGame();
             //break;
             case GameState.Playing:
-                setCanvasOff();
+                //setCanvasOff();
                 LevelManager.s_instance.changeLevelState(LevelState.Playing);
                 break;
             case GameState.GameOver:
@@ -87,6 +85,10 @@ public class GameManager : MonoBehaviour
     //    return m_gameState;
     //}
 
+    //public void setgameUI() {
+
+    //}
+
     public void setCanvasOff() {
         Debug.Log("Canvas off");
         canvas.SetActive(false);
@@ -102,14 +104,19 @@ public class GameManager : MonoBehaviour
     }
 
     public void mainMenu() {
+        gameUI.SetActive(false );
         gameOverUI.SetActive(false);
         winUI.SetActive(false);
         creditsUI.SetActive(false);
+        backgroundUI.SetActive(true);
         mainMenuUI.SetActive(true);
     }
 
     public void startGame() {
-        //canvas.SetActive(false);
+        mainMenuUI.SetActive(false);
+        backgroundUI.SetActive(false);
+        gameUI.SetActive(true);
+        canvas.SetActive(true);
         changeGameSate(GameState.Playing);
     }
 
@@ -128,6 +135,7 @@ public class GameManager : MonoBehaviour
     void gameOver() {
         if (canvas != null) {
             // StartCoroutine(slowDownGameOverCanvas());
+            gameUI.SetActive(false);
             mainMenuUI.SetActive(false);
             winUI.SetActive(false);
             canvas.SetActive(true);
@@ -139,6 +147,7 @@ public class GameManager : MonoBehaviour
     void gameFinished() {
         Debug.Log("thisss");
         if (canvas != null) {
+            gameUI.SetActive(false);
             mainMenuUI.SetActive(false);
             gameOverUI.SetActive(false);
             canvas.SetActive(true);
@@ -156,8 +165,4 @@ public class GameManager : MonoBehaviour
     public void exitGame() {
         Application.Quit();
     }
-
-    //public void retryLevel() {
-    //    SceneManager.LoadScene(gameScene);
-    //}
 }

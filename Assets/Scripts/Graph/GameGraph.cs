@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public  class GameGraph : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public  class GameGraph : MonoBehaviour
     public float edgeRadius = 1f; // Specify the radius within which edges will be created
     public GameObject playerPos;
     public GameObject enemyPos;
+    public TextMeshProUGUI numberText;
 
     public class Node {
         public float gCost;
@@ -61,28 +63,12 @@ public  class GameGraph : MonoBehaviour
         dijkstraSearchNodes = pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes);
         nodesPath = (GameManager.s_instance.getIsEasyMode()) ? pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes) : pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
     }
-    void Start() {
-        // Find node GameObjects in the scene and add them to the graph
-        
-
-        //int it = 0;
-        //foreach (Node node in nodes) {
-
-        //    Debug.Log("index: " + it + " name: " + nodes[it].gameObject.name);
-
-        //    it++;
-        //}
-
-
-
-        // Debug.LogWarning("Nodes in star: " + starSearchNodes.Count);
-        //Debug.LogWarning("Nodes in dijk: " + dijkstraSearchNodes.Count);
-
-    }
-
+ 
     private void Update() {
         UpdateSourceNode();
         UpdateTargetNode();
+
+        setDistanceOnUI();
 
         nodesPath = (GameManager.s_instance.getIsEasyMode()) ? pathFinding.DijkstraSearch(enemySourceNode, playerTargetNode, nodes) : pathFinding.AStarSearch(enemySourceNode, playerTargetNode);
 
@@ -185,6 +171,12 @@ public  class GameGraph : MonoBehaviour
                 minDistance = distance;
                 enemySourceNode = node;
             }
+        }
+    }
+
+    void setDistanceOnUI() {
+        if(numberText != null) {
+            numberText.text = Vector3.Distance(playerPos.transform.position, enemyPos.transform.position).ToString("F2");
         }
     }
 }
