@@ -51,19 +51,6 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void Update() {
-        //if (m_gameState == GameState.GameOver) {
-        //    gameOver();
-        //}
-        //if (m_gameState == GameState.GameFinished) {
-        //    // isCoroutineActivated = true;
-        //    Debug.Log("manager finisehd game");
-        //    gameFinished();
-        //}
-       
-    }
-
-
     public void changeGameSate(GameState t_newState) {
         if (m_gameState == t_newState) {
             return;
@@ -83,9 +70,11 @@ public class GameManager : MonoBehaviour
                 LevelManager.s_instance.changeLevelState(LevelState.Playing);
                 break;
             case GameState.GameOver:
+                SoundManager.s_instance.PlaySFXCaught();
                 gameOver();
                 break;
             case GameState.GameFinished:
+                SoundManager.s_instance.PlaySFXVictory();
                 Debug.Log("manager finisehd game");
                 gameFinished();
                 break;

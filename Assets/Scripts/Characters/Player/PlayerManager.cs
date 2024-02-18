@@ -30,6 +30,7 @@ public class PlayerManager : MonoBehaviour
         playerState = PlayerState.None;
     }
     void Start() {
+        startPos.y = transform.position.y;
         animator = GetComponent<Animator>();
         rotPos = transform.transform.rotation;
        // playerPos = transform.position;

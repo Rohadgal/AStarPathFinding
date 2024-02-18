@@ -15946,7 +15946,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &442917372
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20961,6 +20961,8 @@ MonoBehaviour:
   sfxClip_Start: {fileID: 8300000, guid: 1b92f7d795aac2342a481803a2d8de71, type: 3}
   sfxClip_Mode: {fileID: 8300000, guid: 6e6f2c1dc25e94842997756ac8ee3962, type: 3}
   sfxClip_Credits: {fileID: 8300000, guid: 4e42cdafbe20e1440ba937d2035ce680, type: 3}
+  sfxClip_Victory: {fileID: 8300000, guid: 156f355a5d973104f9e03ba792f97cb8, type: 3}
+  sfxClip_Caught: {fileID: 8300000, guid: ba18ee72337780f4db4e295e758898e2, type: 3}
 --- !u!82 &565432935
 AudioSource:
   m_ObjectHideFlags: 0
@@ -23319,8 +23321,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 241, y: -170}
-  m_SizeDelta: {x: 318.56, y: 238.5}
+  m_AnchoredPosition: {x: 344, y: -170}
+  m_SizeDelta: {x: 458.28, y: 238.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &640713181
 MonoBehaviour:
@@ -23342,13 +23344,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '3D Game Assets:
-
-
-    Sprites:
-
-
-    SFX and Music:'
+  m_text: "3D Game Assets and Animations:  \n\t\"Super Beach Pack\" by Samer Khatib\n\t\"City
+    People Lite\" by Denys Almaral\n\t\"FREE Low Poly Human - RPG Character by Blink\n\nSprites:\n\t\"cancun-1228131_1920\"
+    by hawaiianbarbee\n\nSFX and Music:\n\t\"Nature Sound FX\" by lumino"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -23375,8 +23373,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -69999,7 +69997,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2011094643
 RectTransform:
   m_ObjectHideFlags: 0

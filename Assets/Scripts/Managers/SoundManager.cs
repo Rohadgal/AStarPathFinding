@@ -19,17 +19,19 @@ public class SoundManager : MonoBehaviour
     public AudioClip sfxClip_Start;
     public AudioClip sfxClip_Mode;
     public AudioClip sfxClip_Credits;
+    public AudioClip sfxClip_Victory;
+    public AudioClip sfxClip_Caught;
 
-    //private void Awake() {
-    //    if (FindObjectOfType<SoundManager>() != null &&
-    //        FindObjectOfType<SoundManager>().gameObject != gameObject) {
-    //        Destroy(gameObject);
-    //        return;
-    //    }
+    private void Awake() {
+        //if (FindObjectOfType<SoundManager>() != null &&
+        //    FindObjectOfType<SoundManager>().gameObject != gameObject) {
+        //    Destroy(gameObject);
+        //    return;
+        //}
 
-    //    DontDestroyOnLoad(gameObject);
-    //    s_instance = this;
-    //}
+        //DontDestroyOnLoad(gameObject);
+        s_instance = this;
+    }
 
     void Start() {
         // Play background music
@@ -59,5 +61,14 @@ public class SoundManager : MonoBehaviour
 
     public void PlaySFXCredits() {
         PlaySFX(sfxClip_Credits);
+    }
+
+    public void PlaySFXVictory() {
+        Debug.Log("Victory");
+        PlaySFX(sfxClip_Victory);
+    }
+
+    public void PlaySFXCaught() {
+        PlaySFX(sfxClip_Caught);
     }
 }
