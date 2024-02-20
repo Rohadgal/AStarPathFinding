@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GameFinished:
                 SoundManager.s_instance.PlaySFXVictory();
-                Debug.Log("manager finisehd game");
+                //Debug.Log("manager finisehd game");
                 gameFinished();
                 break;
             default:
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     //}
 
     public void setCanvasOff() {
-        Debug.Log("Canvas off");
+        //Debug.Log("Canvas off");
         canvas.SetActive(false);
     }
 
@@ -122,12 +122,12 @@ public class GameManager : MonoBehaviour
 
     public void easy() {
         isEasyMode = true;
-        Debug.Log("mode: " + isEasyMode);
+        //Debug.Log("mode: " + isEasyMode);
     }
 
     public void hard() {
         isEasyMode = false;
-        Debug.Log("mode: " + isEasyMode);
+        //Debug.Log("mode: " + isEasyMode);
     }
 
     public bool getIsEasyMode() { return isEasyMode; }
@@ -145,7 +145,6 @@ public class GameManager : MonoBehaviour
     }
 
     void gameFinished() {
-        Debug.Log("thisss");
         if (canvas != null) {
             gameUI.SetActive(false);
             mainMenuUI.SetActive(false);

@@ -67,15 +67,15 @@ public class PlayerManager : MonoBehaviour
             case PlayerState.None:
                 break;
             case PlayerState.Idle:
-                Debug.Log("Idle");
+                //Debug.Log("Idle");
                 animator.SetBool("isIdle", true);
                 break;
             case PlayerState.Running:
-                Debug.Log("Running");
+                //Debug.Log("Running");
                 animator.SetBool("isRunning", true);
                 break;
             case PlayerState.RunningBack:
-                Debug.Log("RunningBack");
+                //Debug.Log("RunningBack");
                 animator.SetBool("isRunningBack", true);
                 break;
             case PlayerState.Caught:
@@ -119,7 +119,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "SafeZone") {
-            Debug.Log("GameFinished");
+            //Debug.Log("GameFinished");
             ChangePlayerState(PlayerState.Safe);
             LevelManager.s_instance.changeLevelState(LevelState.LevelFinished);
         }

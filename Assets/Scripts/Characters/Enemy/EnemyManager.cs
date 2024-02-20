@@ -48,7 +48,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     void updateNodes() {
-        ChangeEnemyState(EnemyState.Idle);
+        ChangeEnemyState(EnemyState.None);
         currentNodeIndex = 0;
         nodesPath = gameGraph.nodesPath;
         MoveToNode(nodesPath[currentNodeIndex]);
@@ -77,7 +77,7 @@ public class EnemyManager : MonoBehaviour
         
 
         if (Vector3.Distance(playerTarget.transform.position, transform.position) <= catchPlayerThreshold){
-            Debug.LogWarning("has caught player");
+           // Debug.LogWarning("has caught player");
             hasCaughtPlayer = true;
         }
 
@@ -104,7 +104,7 @@ public class EnemyManager : MonoBehaviour
                 currentNodeIndex++;
                 // If there are no more nodes, the enemy has reached the end of the path
                 if (currentNodeIndex >= nodesPath.Count) {
-                    Debug.Log("Enemy reached the last node.");
+                    //Debug.Log("Enemy reached the last node.");
                     ChangeEnemyState(EnemyState.Idle);
                     //enabled = false; // Disable this script
                     
@@ -162,7 +162,7 @@ public class EnemyManager : MonoBehaviour
                 animator.SetBool("isChasing", true);
                 break;
             case EnemyState.busy:
-                Debug.Log("isBusy");
+              //  Debug.Log("isBusy");
                 animator.SetBool("isBusy", true);
                 break;
             default: break;

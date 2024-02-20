@@ -64,7 +64,7 @@ public class SoundManager : MonoBehaviour
     }
 
     public void PlaySFXVictory() {
-        Debug.Log("Victory");
+        //Debug.Log("Victory");
         PlaySFX(sfxClip_Victory);
     }
 

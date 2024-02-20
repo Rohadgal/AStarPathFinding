@@ -94,24 +94,25 @@ public  class GameGraph : MonoBehaviour
     void CreateEdges() {
         // Connect nodes with edges
         for (int i = 0; i < nodes.Count; i++) {
-            Node currentNode = nodes[i];
-            for (int j = i + 1; j < nodes.Count; j++) {
-                Node targetNode = nodes[j];
-                // Check if an edge between currentNode and targetNode already exists
+            Node currentNode = nodes[i]; // Get the current node to create edges from
+            for (int j = i + 1; j < nodes.Count; j++) { // Iterate over remaining nodes to create edges to
+                Node targetNode = nodes[j]; // Get the target node to create an edge to
+                                            // check if an edge between currentNode and targetNode already exists
                 bool edgeExists = false;
                 foreach (Edge edge in currentNode.edges) {
-                    if (edge.connectedNode == targetNode) {
+                    if (edge.connectedNode == targetNode) { // If an edge to targetNode exists, mark it as existing
                         edgeExists = true;
-                        break;
+                        break; // No need to continue searching for edges
                     }
                 }
+                // If an edge doesn't already exist and the distance between nodes is within a specified radius
                 if (!edgeExists) {
                     float distance = Vector3.Distance(currentNode.gameObject.transform.position, targetNode.gameObject.transform.position);
                     if (distance <= edgeRadius) {
                         // Create an edge between nodes
-                        Edge newEdge = new Edge(targetNode, distance);
-                        currentNode.edges.Add(newEdge);
-                        targetNode.edges.Add(new Edge(currentNode, distance)); // Add edge to targetNode as well
+                        Edge newEdge = new Edge(targetNode, distance); // Create a new edge with the targetNode and distance
+                        currentNode.edges.Add(newEdge); // Add the edge to the current node's list of edges
+                        targetNode.edges.Add(new Edge(currentNode, distance)); // Add the edge to the target node's list of edges as well
                     }
                 }
             }
